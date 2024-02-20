@@ -1,34 +1,39 @@
-# DOWNLOAD GEOPY to calculate distance between Latitude and longitude
-# do: pip install geopy
+# Import geodesic function from geopy.distance to calculate geographical distance
 from geopy.distance import geodesic as GD
 
+# Function to filter data from the airports.dat file
 def filterData():
-    data=open("airports.dat", "r", encoding='utf8')
-    totalAirport = []
-    for line in data:
-        eachAirport = []
-        split = line.split(',')
-        if "Asia" in split[11]:
-            eachAirport.append(split[1].strip('"'))     # Airport Name
-            eachAirport.append(split[2].strip('"'))     # City
-            eachAirport.append(split[3].strip('"'))     # Country
-            eachAirport.append(split[4].strip('"'))     # IATA code
-            eachAirport.append(float(split[6]))         # Latitude
-            eachAirport.append(float(split[7]))         # Longitude
-            totalAirport.append(eachAirport)
+    with open("airports.dat", "r", encoding='utf8') as data:
+        totalAirport = {}
+
+        for line in data:
+            split = line.split(',')
+
+            if "Asia" in split[11]:
+                eachAirport = {
+                    "name": split[1].strip('"'),
+                    "city": split[2].strip('"'),
+                    "country": split[3].strip('"'),
+                    "iata": split[4].strip('"'),
+                    "latitude": float(split[6]),
+                    "longitude": float(split[7])
+                }
+
+                totalAirport[eachAirport["iata"]] = eachAirport
+
     return totalAirport
 
+# Function to calculate distance between two geographical locations
 def calculateDistance(latitude1, longitude1, latitude2, longitude2):
-    location1 = (latitude1, longitude1)
-    location2 = (latitude2, longitude2)
+    location1 = (latitude1, longitude1)  # Create a tuple for location 1
+    location2 = (latitude2, longitude2)  # Create a tuple for location 2
 
+    # Calculate the distance between the two locations in kilometers
     distance = GD(location1, location2).km
-    print(str(distance) + " kilometers")    # check result
+
+    # Print the distance for checking
+    # print(str(distance) + " kilometers")
+
+    # Return the distance
     return distance
 
-airportData = filterData()
-print(str(len(airportData)) + " airports in Asia")
-print(airportData[55])        # Just to check and see at index
-
-# test calculate distance between airport 500 and airport 600
-calculateDistance(airportData[500][4], airportData[500][5], airportData[600][4], airportData[600][5])
