@@ -1,3 +1,10 @@
+customtkinter~=5.0.3
 darkdetect~=0.3.1
+future~=0.18.2
+geocoder
+pillow~=9.3.0
+pyperclip~=1.8.2
+pywin32; platform_system=="Windows"
+requests==2.26.0
 typing-extensions~=4.4.0
 packaging
